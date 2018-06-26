@@ -1,0 +1,33 @@
+#!/bin/bash
+
+echo
+echo "Bearer Summary"
+#echo "----------------------------------------"
+sqlite3 -header -column tails.sqlite <<!
+.width 15 6;
+select bearer,count(*) as count from bearers where enabled  group by 1 order by 1  ;
+!
+
+echo
+echo "FBO Summary"
+#echo "----------------------------------------"
+sqlite3 -header -column tails.sqlite <<!
+.width 6 6;
+select case fbo when 0 then 'off' else 'on' end as FBO,count(*) as count from radios where device='wlan1'  group by 1 order by 1  ;
+!
+
+echo
+echo "SSID Summary"
+#echo "----------------------------------------"
+sqlite3 -header -column tails.sqlite <<!
+.width 6 23 6;
+select device,ssid,count(*) as count from aps  group by 2,1 order by 2,1  ;
+!
+
+echo
+echo "WPA Summary"
+#echo "----------------------------------------"
+sqlite3 -header -column tails.sqlite <<!
+.width 6 6 6;
+select device,case psk when '' then '' else 'PWD' end  as PSK ,count(*) as cnt from aps  group by 1,2;
+!
