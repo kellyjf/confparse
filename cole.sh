@@ -2,7 +2,7 @@
 
 sqlite3 tails.sqlite < cole.sql
 
-for file in *gz; do
+for file in current/*gz; do
 	echo "===============  $file ================="
 	rm -rf var
 	tar xf $file

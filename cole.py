@@ -35,7 +35,6 @@ curs.execute("insert into systems values (?,?,?)",[serial,version,wow])
 for bear, ena in b:
 	curs.execute("insert into bearers values (?,?,?)",[serial,bear,ena])
 
-print r
 for dev,cabin,fbo in r:
 	curs.execute("insert into radios values (?,?,?,?)",[serial,dev,cabin,fbo])
 
