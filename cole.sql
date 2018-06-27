@@ -21,8 +21,9 @@ create table a429s (
 
 create table labels (
   serial varchar(16),
-  id     varchar(32),
-  label  varchar(8) 
+  name   varchar(32), 
+  label  varchar(8),
+  port   int
 );
 
 create table systems (

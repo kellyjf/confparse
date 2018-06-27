@@ -16,12 +16,6 @@ with open("var/jaguar/configs/active/radios.json", "r") as f:
 	radios=json.load(f)
 with open("var/jaguar/configs/active/wowmons.json", "r") as f:
 	wowmons=json.load(f)
-with open("var/jaguar/configs/active/functions.json", "r") as f:
-	funcs=json.load(f)
-with open("var/jaguar/configs/active/a429.json", "r") as f:
-	a429s=json.load(f)
-with open("var/jaguar/casp/config.json", "r") as f:
-	casp=json.load(f)
 
 
 wow=[x.get('source') for x in wowmons if x.get('_id')=="wow"][0]
@@ -49,9 +43,31 @@ for dev,ssid,psk in aps:
 	curs.execute("insert into aps values (?,?,?,?)",[serial,dev,ssid,psk])
 
 
+with open("var/jaguar/configs/active/functions.json", "r") as f:
+	funcs=json.load(f)
 for fs in [x for x in funcs if x.get('gpio',False)]:
 	curs.execute("insert into functions values (?,?,?)",[serial,fs.get('_id'),fs.get('gpio')])
-	print fs
+
+with open("var/jaguar/configs/active/a429.json", "r") as f:
+	a429s=json.load(f)
+arincs=[(x.get('_id'),x.get('parity'),x.get('speed')) for x in a429s if x.get('enabled')]
+for aid,parity,speed in arincs:
+	curs.execute("insert into a429s values (?,?,?,?)",[serial,aid,parity,speed])
+	
+with open("var/jaguar/configs/active/a429.json", "r") as f:
+	a429s=json.load(f)
+arincs=[(x.get('_id'),x.get('parity'),x.get('speed')) for x in a429s if x.get('enabled')]
+for aid,parity,speed in arincs:
+	curs.execute("insert into a429s values (?,?,?,?)",[serial,aid,parity,speed])
+	
+with open("var/jaguar/casp/config.json", "r") as f:
+	casp=json.load(f)
+ldict=casp.get('labels',{})
+labels=ldict.keys()
+for name,lvals in ldict.iteritems():
+	conf=lvals.get('config',{})
+	curs.execute("insert into labels values (?,?,?,?)",[serial,name,conf.get('label'),conf.get('port')])
+
 curs.close()
 
 db.commit()
