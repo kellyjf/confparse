@@ -5,7 +5,8 @@ drop table if exists aps;
 
 create table systems (
   serial varchar(16),
-  version int
+  version int,
+  wow    varchar(16)
 );
 
 create table bearers (

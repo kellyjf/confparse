@@ -14,6 +14,10 @@ with open("var/jaguar/configs/active/clients.json", "r") as f:
 	clients=json.load(f)
 with open("var/jaguar/configs/active/radios.json", "r") as f:
 	radios=json.load(f)
+with open("var/jaguar/configs/active/wowmons.json", "r") as f:
+	wowmons=json.load(f)
+
+wow=[x.get('source') for x in wowmons if x.get('_id')=="wow"][0]
 
 serial=[x['serial'] for x in lru][0]
 version=[x['value'] for x in systems if x['_id']=="schema-version" ][0]
@@ -26,7 +30,7 @@ aps=[(x['device'],x['ssid'],x['psk']) for x in cabin]
 db=sql.connect("tails.sqlite")
 curs=db.cursor()
 
-curs.execute("insert into systems values (?,?)",[serial,version])
+curs.execute("insert into systems values (?,?,?)",[serial,version,wow])
 
 for bear, ena in b:
 	curs.execute("insert into bearers values (?,?,?)",[serial,bear,ena])
