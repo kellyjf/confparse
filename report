@@ -31,3 +31,11 @@ sqlite3 -header -column tails.sqlite <<!
 .width 6 6 6;
 select device,case psk when '' then '' else 'PWD' end  as PSK ,count(*) as cnt from aps  group by 1,2;
 !
+
+echo
+echo "WOW Summary"
+#echo "----------------------------------------"
+sqlite3 -header -column tails.sqlite <<!
+.width 15 6;
+select wow,count(*) as cnt from systems  group by 1;
+!

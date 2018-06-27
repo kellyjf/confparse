@@ -16,6 +16,13 @@ with open("var/jaguar/configs/active/radios.json", "r") as f:
 	radios=json.load(f)
 with open("var/jaguar/configs/active/wowmons.json", "r") as f:
 	wowmons=json.load(f)
+with open("var/jaguar/configs/active/functions.json", "r") as f:
+	funcs=json.load(f)
+with open("var/jaguar/configs/active/a429.json", "r") as f:
+	a429s=json.load(f)
+with open("var/jaguar/casp/config.json", "r") as f:
+	casp=json.load(f)
+
 
 wow=[x.get('source') for x in wowmons if x.get('_id')=="wow"][0]
 
@@ -42,6 +49,9 @@ for dev,ssid,psk in aps:
 	curs.execute("insert into aps values (?,?,?,?)",[serial,dev,ssid,psk])
 
 
+for fs in [x for x in funcs if x.get('gpio',False)]:
+	curs.execute("insert into functions values (?,?,?)",[serial,fs.get('_id'),fs.get('gpio')])
+	print fs
 curs.close()
 
 db.commit()

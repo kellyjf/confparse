@@ -2,6 +2,28 @@ drop table if exists systems;
 drop table if exists bearers;
 drop table if exists radios;
 drop table if exists aps;
+drop table if exists a429s;
+drop table if exists labels;
+drop table if exists functions;
+
+create table functions (
+  serial varchar(16),
+  id     varchar(32),
+  gpio   int 
+);
+
+create table a429s (
+  serial varchar(16),
+  id     varchar(32),
+  parity varchar(8), 
+  speed  varchar(8) 
+);
+
+create table labels (
+  serial varchar(16),
+  id     varchar(32),
+  label  varchar(8) 
+);
 
 create table systems (
   serial varchar(16),
