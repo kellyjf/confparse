@@ -68,6 +68,19 @@ for name,lvals in ldict.iteritems():
 	conf=lvals.get('config',{})
 	curs.execute("insert into labels values (?,?,?,?)",[serial,name,conf.get('label'),conf.get('port')])
 
+with open("var/jaguar/configs/active/movingmaps.json", "r") as f:
+	mmaps=json.load(f)
+for mlabel,alabel in [ (x.get('_id'),x.get('active_label')) for x in mmaps if x.get('active_label')]:
+	curs.execute("insert into maps values (?,?,?)",[serial,mlabel,alabel])
+
+with open("var/jaguar/configs/active/rcairshows.json", "r") as f:
+	rcas=json.load(f)
+rca=rcas[0]
+for k,v in rca.iteritems():
+	if v != "NONE" and k != '_id':
+		curs.execute("insert into rcairshows values (?,?,?)",[serial,k,v])
+
+
 curs.close()
 
 db.commit()

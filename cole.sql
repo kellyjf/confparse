@@ -4,6 +4,8 @@ drop table if exists radios;
 drop table if exists aps;
 drop table if exists a429s;
 drop table if exists labels;
+drop table if exists maps;
+drop table if exists rcairshows;
 drop table if exists functions;
 
 create table functions (
@@ -24,6 +26,12 @@ create table labels (
   name   varchar(32), 
   label  varchar(8),
   port   int
+);
+
+create table maps (
+  serial   varchar(16),
+  mlabel   varchar(32), 
+  alabel   varchar(32) 
 );
 
 create table systems (
@@ -50,6 +58,12 @@ create table aps (
   device varchar(32),
   ssid varchar(128),
   psk varchar(128)
+);
+
+create table rcairshows (
+  serial varchar(16),
+  nonkey varchar(32),
+  nonval varchar(128)
 );
 
 
