@@ -1,6 +1,14 @@
 #!/bin/bash
 
 echo
+echo "System Summary"
+#echo "----------------------------------------"
+sqlite3 -header -column tails.sqlite <<!
+.width 15 6;
+select version as schema,count(*) as count from systems group by 1 order by 1  ;
+!
+
+echo
 echo "Bearer Summary"
 #echo "----------------------------------------"
 sqlite3 -header -column tails.sqlite <<!
@@ -39,3 +47,23 @@ sqlite3 -header -column tails.sqlite <<!
 .width 15 6;
 select wow,count(*) as cnt from systems  group by 1;
 !
+
+
+echo
+echo "RC Airshow Summary"
+#echo "----------------------------------------"
+sqlite3 -header -column tails.sqlite <<!
+.width 15 6;
+select nonkey,count(*) as count from rcairshows where nonkey not in ('fmstype') group by 1;
+!
+
+
+echo
+echo "WOW Discrete Summary"
+#echo "----------------------------------------"
+sqlite3 -header -column tails.sqlite <<!
+.width 15 6;
+select gpio,count(*) as count from functions where id=="WOW" group by 1;
+!
+
+
