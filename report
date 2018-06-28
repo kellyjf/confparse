@@ -67,3 +67,17 @@ select gpio,count(*) as count from functions where id=="WOW" group by 1;
 !
 
 
+echo
+echo "Low speed labels"
+#echo "----------------------------------------"
+sqlite3 -header -column tails.sqlite <<!
+.width 30 6;
+select l.name, count(*) as count from labels l 
+join a429s a 
+on l.serial=a.serial and ('rx' ||l.port) == a.id 
+where a.speed=='low'
+group by 1;
+!
+
+
+
