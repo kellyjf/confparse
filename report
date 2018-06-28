@@ -68,6 +68,31 @@ select gpio,count(*) as count from functions where id=="WOW" group by 1;
 
 
 echo
+echo "Low speed busses"
+#echo "----------------------------------------"
+sqlite3 -header -column tails.sqlite <<!
+.width 15 6;
+select id, count(*) as count from a429s  
+where speed=='low'
+group by 1 order by 1;
+!
+
+echo
+echo "Low speed bus census"
+#echo "----------------------------------------"
+sqlite3 -header -column tails.sqlite <<!
+.width 15 6;
+select count as "Nr of Busses", count(*) as number from (
+	select serial, count(*) as count from a429s  
+	where speed=='low'
+	group by 1 
+)  as ccnt
+group by 1 order by 1;
+!
+
+exit
+
+echo
 echo "Low speed labels"
 #echo "----------------------------------------"
 sqlite3 -header -column tails.sqlite <<!
