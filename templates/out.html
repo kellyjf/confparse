@@ -1,0 +1,21 @@
+<!doctype html>
+<link rel='stylesheet' href={{url_for('static',filename='style.css')}} />
+
+{% macro renderhead() %}
+<tr><th>Schema</th><th>Count</th></tr>
+{% endmacro %}
+
+{% macro renderline(system) %}
+<tr>
+<td> {{system['schema']}}</td>
+<td>{{system['count']}}</td>
+<td><a href={{url_for('system',id=system['schema'])}}>Link</a></td>
+</tr>
+{% endmacro %}
+
+<table border=1>
+{{ renderhead() }} 
+{% for system in systems %}
+{{ renderline(system) }} 
+{% endfor %}
+</table>
