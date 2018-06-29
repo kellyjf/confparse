@@ -1,9 +1,17 @@
 #!/usr/bin/env python
 
 
-from flask import Flask,render_template,url_for
+from flask import Flask,render_template,url_for,g
 import sqlite3 as sq
 
+def get_cursor():
+	if 'db' not in g:
+		g.db=sq.connect("tails.sqlite")
+		g.db.row_factory=sq.Row
+		print "New Connection"
+
+	curr=g.db.cursor()
+	return curr
 
 app=Flask(__name__)
 
@@ -13,14 +21,15 @@ def tails(id):
 
 @app.route("/system/<id>")
 def system(id):
-	return "ID is {}".format(id)
+	curr=get_cursor()
+	systems=curr.execute("select * from systems where version=? order by serial",[id])	
+	systems=systems.fetchall()
+	curr.close()
+	return render_template('versions.html',systems=systems)
 
 @app.route("/systems")
 def systems():
-	db=sq.connect("tails.sqlite")
-	db.row_factory=sq.Row
-	curr=db.cursor()
-	ret="<html><table>"
+	curr=get_cursor()
 	systems=curr.execute("select version as schema,count(*) as count from systems group by 1 order by 1")	
 	systems=systems.fetchall()
 	curr.close()

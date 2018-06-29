@@ -1,0 +1,25 @@
+<!doctype html>
+<link rel='stylesheet' href={{url_for('static',filename='style.css')}} />
+
+{% macro renderhead() %}
+<tr>
+<th>Serial</th>
+<th>Version</th>
+<th>WoW</th>
+</tr>
+{% endmacro %}
+
+{% macro renderline(system) %}
+<tr>
+<td>{{system['serial']}}</td>
+<td>{{system['version']}}</td>
+<td>{{system['wow']}}</td>
+</tr>
+{% endmacro %}
+
+<table border=1>
+{{ renderhead() }} 
+{% for system in systems %}
+{{ renderline(system) }} 
+{% endfor %}
+</table>
