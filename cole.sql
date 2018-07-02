@@ -7,6 +7,7 @@ drop table if exists labels;
 drop table if exists maps;
 drop table if exists rcairshows;
 drop table if exists functions;
+drop table if exists ports;
 
 create table functions (
   serial varchar(16),
@@ -35,9 +36,10 @@ create table maps (
 );
 
 create table systems (
-  serial varchar(16),
+  serial  varchar(16),
   version int,
-  wow    varchar(16)
+  profile varchar(32),
+  wow     varchar(16)
 );
 
 create table bearers (
@@ -49,8 +51,9 @@ create table bearers (
 create table radios (
   serial varchar(16),
   device varchar(32),
-  cabin boolean,
-  fbo boolean
+  cabin  boolean,
+  fbo    boolean,
+  band   float
 );
 
 create table aps (
@@ -64,6 +67,13 @@ create table rcairshows (
   serial varchar(16),
   nonkey varchar(32),
   nonval varchar(128)
+);
+
+create table ports (
+  serial varchar(16),
+  name   varchar(16),
+  equip  varchar(16),
+  vid    int
 );
 
 

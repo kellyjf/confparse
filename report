@@ -41,20 +41,20 @@ select device,case psk when '' then '' else 'PWD' end  as PSK ,count(*) as cnt f
 !
 
 echo
-echo "WOW Summary"
-#echo "----------------------------------------"
-sqlite3 -header -column tails.sqlite <<!
-.width 15 6;
-select wow,count(*) as cnt from systems  group by 1;
-!
-
-
-echo
 echo "RC Airshow Summary"
 #echo "----------------------------------------"
 sqlite3 -header -column tails.sqlite <<!
 .width 15 6;
 select nonkey,count(*) as count from rcairshows where nonkey not in ('fmstype') group by 1;
+!
+
+
+echo
+echo "WOW Summary"
+#echo "----------------------------------------"
+sqlite3 -header -column tails.sqlite <<!
+.width 15 6;
+select wow,count(*) as cnt from systems  group by 1;
 !
 
 
@@ -78,7 +78,7 @@ group by 1 order by 1;
 !
 
 echo
-echo "Low speed bus census"
+echo "Low speed bus count"
 #echo "----------------------------------------"
 sqlite3 -header -column tails.sqlite <<!
 .width 15 6;
@@ -89,6 +89,24 @@ select count as "Nr of Busses", count(*) as number from (
 )  as ccnt
 group by 1 order by 1;
 !
+
+echo
+echo "Port Usage Summary"
+#echo "----------------------------------------"
+sqlite3 -header -column tails.sqlite <<!
+.width 12 12 12 6;
+select equip,name,vid,count(*) as count from ports group by 1,2,3 order by 1,2,3;
+!
+
+
+echo
+echo "AP Band Summary"
+#echo "----------------------------------------"
+sqlite3 -header -column tails.sqlite <<!
+.width 12 12 6;
+select device,band,count(*) as count from radios group by 1,2;
+!
+
 
 exit
 

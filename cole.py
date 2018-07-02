@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 import sys
+import os
 import json
 import sqlite3 as sql
 
@@ -18,23 +19,29 @@ serial=[x['serial'] for x in lru][0]
 with open("var/jaguar/configs/active/wowmons.json", "r") as f:
 	wowmons=json.load(f)
 wow=[x.get('source') for x in wowmons if x.get('_id')=="wow"][0]
-curs.execute("insert into systems values (?,?,?)",[serial,version,wow])
+profile=os.readlink("var/jaguar/configs/active")
+curs.execute("insert into systems values (?,?,?,?)",[serial,version,profile,wow])
 
 #  RADIOS
 #
 with open("var/jaguar/configs/active/radios.json", "r") as f:
 	radios=json.load(f)
-for dev,cabin,fbo in [(x['device'],x['cabin'],x['fbo']) for x in radios ]:
-	curs.execute("insert into radios values (?,?,?,?)",[serial,dev,cabin,fbo])
+	for radio in radios:
+		band=float(0)
+		for prof in radio.get('profiles',[]):
+			if prof.get('ap',False) and prof.get('enabled',True):
+				band=float(prof.get('band',0))
+		curs.execute("insert into radios values (?,?,?,?,?)", 
+			[serial, radio['device'],radio['cabin'],radio['fbo'],band])
 
 #  WIFI APs
 #
 with open("var/jaguar/configs/active/clients.json", "r") as f:
 	clients=json.load(f)
-cabin=[x['aps'] for x in clients if x['_id']=="int-cabin" ][0]
-aps=[(x['device'],x['ssid'],x['psk']) for x in cabin]
-for dev,ssid,psk in aps:
-	curs.execute("insert into aps values (?,?,?,?)",[serial,dev,ssid,psk])
+	cabin=[x['aps'] for x in clients if x['_id']=="int-cabin" ][0]
+	aps=[(x['device'],x['ssid'],x['psk']) for x in cabin]
+	for dev,ssid,psk in aps:
+		curs.execute("insert into aps values (?,?,?,?)",[serial,dev,ssid,psk])
 
 #  BEARERS
 #
@@ -68,6 +75,21 @@ with open("var/jaguar/configs/active/movingmaps.json", "r") as f:
 for mlabel,alabel in [ (x.get('_id'),x.get('active_label')) for x in mmaps if x.get('active_label')]:
 	curs.execute("insert into maps values (?,?,?)",[serial,mlabel,alabel])
 
+
+#  PORTS
+#
+with open("var/jaguar/configs/active/ports.json", "r") as f:
+	ports=json.load(f)
+	for port in ports:
+		equip=port.get('equip',{})
+		vid=equip.get('vid',{})
+		curs.execute("insert into ports values (?,?,?,?)",
+			[serial, port.get('_id'),equip.get('_id'),vid.get('_id')])
+
+
+
+#  RCAIRSHOWS
+#
 try:
 	with open("var/jaguar/configs/active/rcairshows.json", "r") as f:
 		rcas=json.load(f)
