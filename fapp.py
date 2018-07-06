@@ -34,7 +34,11 @@ db.create_all()
 @app.route("/role", methods=['GET','POST'])
 def role():
 	exf=ExForm()
-	return render_template('wtf.html',form=exf)
+	name=None
+	if exf.validate_on_submit():
+		name=exf.name.data
+		exf.name.data=""
+	return render_template('wtf.html',form=exf, name=name)
 
 @app.route("/tails/<id>")
 def tails(id):
